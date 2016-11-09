@@ -1,0 +1,25 @@
+---
+title: AINT351 - P1.2 Linear regression
+header-includes:
+    - \usepackage{fancyhdr}
+    - \pagestyle{fancy}
+    - \fancyhead[LO,LE]{Alistair Hughes - 10421408}
+---
+
+
+# TO REMEMBER
+- understanding of either rand or randn
+- understanding of mean var
+- insight into task
+- (matlab code)
+- What is the task
+- How i solve it
+- What does it mean
+
+- **Eplain**
+- How does changing number samples, bins effect what you see
+- Guassian adding no tegether, doesn't matter what limit they tend to go to a guassain form 
+- what constitutes a sensible choice
+- model data by estimate parameters
+
+### Generate a noisy line
