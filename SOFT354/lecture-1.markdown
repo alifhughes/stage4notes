@@ -96,6 +96,3 @@ CPU code alongside GPU code, working together
 - __global__ keyword before function gets run on the GPU
 - calling a device function ^ mykernel<<1, 1>> how many functions you want to run on the GPU
 
-##### To do
-- C programming brush uo
-- linear algebra

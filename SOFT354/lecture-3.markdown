@@ -23,6 +23,12 @@
     - X/Y = 1024
     - Z   = 64
 
+- **In practise:**
+- If you use 32x32 **blocks** of 1024 **threads**, how many blocks would you need for a 2D array of size
+    - 3399 x 3690
+- 3399 / 32 = 106.2 = 107
+- 3690 / 32 = 115.3 = 116
+
 ![kernel-launch-with-3D-blocks](img/kernel-launch-with-3D-blocks.png)\
 
 ### Linearisation of blocks and grids
@@ -33,7 +39,7 @@
 
 ### Block assignment
 
-- A GPU has multiple _streamng multiprocessors_ (SMs)
+- A GPU has multiple _streaming multiprocessors_ (SMs)
 - Each SM has one or more blocks assigned to it ("**resident**") at any given time
 - Only **whole blocks** can be assigned to SMs, therefore **all threads in a block will run on the same SM**
     - Important for memory sharing
@@ -67,7 +73,7 @@
 - The most effective way to reduce stalls (assuming they're mostly caused by memory access) is to use memory more effectively
     - Coalesced memory reads and shared memory
 
-- But it is also important to maximise the nymber of warps resident in an SM (its **occupancy**);
+- But it is also important to maximise the number of warps resident in an SM (its **occupancy**);
 - The more resident warps, the more chance there's one **ready** to be executed
 
 ### Occupancy
@@ -76,7 +82,6 @@
 - Points to consider
     - Max no of threads per block
     - Max no of resident blocks per multiprocessor
-    - Max no of resident warps per multiprocessor
     - Max no of resident threads per multiprocessor
 
 ![warps-occupancy-1](img/warps-occupancy-1.png)\
@@ -91,6 +96,31 @@
 - When memory being accessed is within 128 bytes of each other
     - You can access the all memory withing that range
 - This saves optimistation as you don't have to multiple calls to the memory
+- You have to plan how the data is stored in memory so when the threads access it in parellel it is next to each other
+    - Therefore the transaction can be in one
+
+### Vector major order
+
+- One way of storing vectors in memory
+- Each vector is next to each other, in full, from start to finish
+- If you wanted to do a calculation on all elements in turn
+- To access the first memory location for all, would have to skip the whole vector's length to get to the other vector's first element
+
+    - M = No. of vectors to add
+    - N = Size of each vector
+- To access each element in turn
+    - globalId * N + j
+- Where global Id - thread, N = size of vector and j = counter for each element
+
+### Component major order
+
+- Each first element in the array is next to each other, each second element of array is next to eachother, etc.
+- If you wanted to perform a calculation on all elements in turn
+- Can access all memory locations in order, all first elements are next to each other
+- To access the second element, you have to skip the total number of vectors to add
+    - And then increment to the position of the threads pointer accordingly
+- j * M + globalId
+- j is the counter of the size of each vector, M is the number of vectors to add, globalId is the position of the current thread
 
 ### Shared memory
 

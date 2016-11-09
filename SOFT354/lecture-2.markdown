@@ -8,7 +8,7 @@
 - GPUs have > 200GB/s global memory bandwidth
     - 50,000 floating point values per second
 - Copying from CPU to the GPU is even slower than global memory access
-- We need to minimise access to globabl memory
+- We need to minimise access to global memory
 
 ### Host and device memory
 
@@ -31,20 +31,20 @@ Steps:
     - Using cudaMemcpy
 3. Kernel runs, computes sin(x) in parallel
     - On each thread
-4. Copy result beack to host to work with
+4. Copy result back to host to work with
 
 ### Static vs Dynamic allocation
 
 - Arrays can be _statically_ or _dynamically_ allocated
-- With **static allocation** the sizxe of the array must be known at compile time
-    - Space is reservered in the program's memory map
+- With **static allocation** the size of the array must be known at compile time
+    - Space is reserved in the program's memory map
     - _float staticArray[10];_
 
-- With **Dynamic allocation** the size of the array can be calculated at runt
+- With **Dynamic allocation** the size of the array can be calculated at run
     - **float* dynamicArray = (float*)malloc(n*sizeof(float));**
 - how many bites you want
 - **Array is just a pointer pointers are just integers**
-- In both cases the variable is just the momory address of the first element in the array
+- In both cases the variable is just the memory address of the first element in the array
 
 
 ![static-vs-dynamic-allocation](img/static-vs-dynamic-allocation.png)\
@@ -91,7 +91,7 @@ Steps:
 ### Pinned memory
 
 - Technique for speeding up RAM < - > memory transfers
-- Transfers between the RAM and GPY can be very fast
+- Transfers between the RAM and GPU can be very fast
     - They use direct memory access to do the copy without involving the CPU
 - **but**, operating systems used **paged virtual memory**
 - The address you get from malloc() doesn't correspond to a physical address in RAM
@@ -123,6 +123,10 @@ Steps:
 - There are other **smaller, faster** memories that we can use to dramatically increase performance
     - **shared memory**
 
+### Temporal locality
+
+- Reusing data and re-executing the same code
+
 ### Caching in GPUs
 
 - The situation is a bit more complicated in GPYs due to how their cores are oganised
@@ -145,10 +149,10 @@ Steps:
     - the data is sent to them all simultaneously
 - Threads can't change the value of data in the uniform cache
 
-### Constanct memory
+### Constant memory
 
-- should still be on the device 
-- but certify kernel code wont modify it 
+- should still be on the device
+- but certify kernel code wont modify it
 - This is to take advantage of the uniform cache we need to specify that a particular variable in global memory can't change
 - use the `__constant__` modifier
 - These variables will be stored in teh device's global memory, in a special area reserved for constant data

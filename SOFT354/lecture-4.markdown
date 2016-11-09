@@ -1,7 +1,7 @@
 # SOFT353 - Divergence and shared memory
 > Date: 20-10-16
 
-### Brand Divergence
+### Brach Divergence
 
 - As a general rule, try to avoid branching statements in kernel code
 - makes it a lot less efficient in some cases
