@@ -1,5 +1,5 @@
 ---
-title: AINT351 - P1.1 1D and 2D distributions
+title: AINT351 - Ian Howard Lab Journel
 header-includes:
     - \usepackage{fancyhdr}
     - \pagestyle{fancy}
@@ -68,23 +68,6 @@ Decreasing the total number samples used doesn't effect the estimated Gaussian g
 The task was to graph a representation of a default 2D distribution, which, in essence, is a normal probability distribution but of a higher dimension. At its heart, it derives from the central limit theorem as it shows two independently correlated set of random normal distributed data's mean still relatively equal to the median of the data values.
 
 If you were to reduce the number of samples, it reduces the density of the cluster in the middle and makes the results more sparse. Increasing the standard deviation increases the distance of the data's relation to the mean. Changing the value of the mean shifts the middle of the cluster to the value set.
-
-
-# TO REMEMBER
-- understanding of either rand or randn
-- understanding of mean var
-- insight into task
-- (matlab code)
-- What is the task
-- How i solve it
-- What does it mean
-
-- **Eplain**
-- How does changing number samples, bins effect what you see
-- Gaussian adding no tegether, doesn't matter what limit they tend to go to a guassain form 
-- what constitutes a sensible choice
-- model data by estimate parameters
-
 ## 1. Generate a noisy line
 
 ![noisyLine-code](../img/noisyLine-code.png)\
@@ -110,10 +93,48 @@ This line demonstrates highly positive correlated data that has noise in the for
 
 The task was to create linear regression line from first principles, this being that we had to program the fundamental methodologies of linear regressions myself, and not to use the in-built Matlab functions. I achieved this by using the least fitting square equation but programmed out step by step. The LFS method can be used to find the 'line of best fit' for a set of correlated data. It does so by minimising the residuals of the points from the curve. I first had to re-create the noisy line as specified in the first question of this practical, again, using `randn` to get the noise for the line as it generates a matrix of normally distributed (Gaussian) values, that being the probability of occurrence tend towards the mean and median of the data. From that I could work out the mean of both axes, mean being the average value over a given data set, which works out to be 1 and ~7 for x and y axes accordingly. The mean was needed to find the deviation of each point of the noisy line away from each axis's mean, deviation being the literal distance from one point to another (distance on each axes current data point from the respective axis mean). These values gave me enough information to calculate the linear regression line with only a few more manipulations to them. First by squaring the x-axis deviations, then multiplying the deviations of each axis together, summing both of these values and dividing together to get the gradient of the line (which works out to be 1.6 as given in the question above) and finally deriving the y-intersect by subtracting the product of the gradient and x-axis mean from the y-axis mean. With the gradient and intersect calculated, you can plug that into the standard y = mx + C equation to get the line. The resulting line essentially reverses the noise giving you a nice smooth line of best fit.
 
-## Fit the test line using your linear regression function
+## 3. Fit the test line using your linear regression function
 
 ![fitted-noisy-LR-code](../img/fitted-noisy-line-code.png)\
 
 ![fitted-noisy-LR-graph](../img/fitted-noisy-LR-graph.png)\
 
 This exercise simply is an amalgamation of the previous two exercises. That is, to plot the 'fitted' line from exercise two (created from first principles using the LFS method) and the noisy linear line from exercise one. This produces a fitted noisy line, emphasising two things. Firstly, that the least fitting square method really does produce a reasonable line of best fit for the data and secondly, that draws attention to the fact the data is so positively correlated.
+
+## 4. Generate a noisy quadratic curve
+
+![noisy-quadratic-curve-code](img/noisy-quadratic-curve-code.png)\
+
+![noisy-quadratic-curve-graph](img/noisy-quadratic-curve-graph.png)\
+
+# TO REMEMBER
+- understanding of either rand or randn
+- understanding of mean var
+- insight into task
+- (matlab code)
+- What is the task
+- How i solve it
+- What does it mean
+
+- **Eplain**
+- How does changing number samples, bins effect what you see
+- Gaussian adding no tegether, doesn't matter what limit they tend to go to a guassain form 
+- what constitutes a sensible choice
+- model data by estimate parameters
+
+
+Generating a noisy quadratic curve simply, as the name suggests, using the second power in order to get the curve, in more formal notation, it generates a parabolic graph. If the graph was extended you would see, as quadratic curves show, that the lines (although noisy) would be symmetrical from when it passes in through the vertex; which in this case would be approximately between -1 and 0. This was achieved using the equation and values provided, as stated it is the A^2 which gives it the curve. B in the equation determines the vertical placement of the graph and C is the constant of the equation which gives us the y-intersect. The graph shows us that as X gets exponentially bigger, Y increases until it reaches a limit, after which it decreases with the exact same (if it were not noisy) intervals as it increased.
+
+If we were to change the values of A it would change the shape of the curve. A cannot be 0, but if we were to increase the value of A, it would reduce the standard deviation from the medium of the graph, if we were to decrease A it would make for a greater standard deviation. If A were negative, the curve would be "flipped". As used in previous exercises, the noise was generated with `randn` function, to give us a matrix of normally distributed numbers. If you were to increase the standard deviation that is used in generating the noise, it would make the points more erratic, meaning they are further away from the 'line'.
+
+## 5. Fit the quadratic curve using linear regression
+
+![fitted-QC-code-1](img/fitted-QC-code-1.png)\
+
+![fitted-QC-code-2](img/fitted-QC-code-2.png)\
+
+![fitted-QC-graph](img/fitted-QC-graph.png)\
+
+This exercises was to replicate the noisy quadratic curve but have it fitted using the `regress` function which returns a vector of coefficient estimates for a multi-linear regression of the responses in Y on the predictors in X. To do this, I had to create a vector of 1s combined with the value of X. We attached them together to make sure we get the first beta value. Then we get the beta value by using the `regress` function with the parameters of our newly created X values and the Y values. This gives us the fitted values of the line. The only change in the fitted quadratic line is the fact, as it is quadratic, we use the power of two to give us the parabolic curve.
+
+The fitted linear line represents a positive correlation between the values of X and Y. But, as described in the last exercise, the quadratic fitted line, although shows correlation, it is both positive and negative to a limit, giving us the curve.

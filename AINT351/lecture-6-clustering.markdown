@@ -77,3 +77,21 @@
 
 - The probability goes up when it is closer to the mean
 - If it is at the tail end of a guassian curve that isn't near another, the probability becomes more certain
+
+### K-means algo
+
+- K is number of clusters
+    - 2 in our case
+- randomly initialise to cluster centroids
+    - 2 of them because want two clusters
+
+- Fist cluster assignment step
+    - go through each of the data points
+    - if it is closer to one or the other of the cluster centroids
+        - Then it will assign it to that cluster
+
+- move centroid step
+    - Move them to the mean of the new clusters
+        - if mean hasn't really changed
+        - then it has converged
+
