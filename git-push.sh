@@ -1,5 +1,5 @@
 #!/bin/bash
 
 git add -A
-git commit -m "Notes update"
+git commit -m "Updated notes"
 git push origin master

@@ -1,9 +1,7 @@
 #!/bin/bash
 
 NOTES_DIR=/Users/user/Documents/STAGE4
-
-##
-
+echo "yo"
 set -e
 
 usage() {
