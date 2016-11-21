@@ -2,6 +2,8 @@
 
 NOTES_DIR=/Users/user/Documents/STAGE4
 
+##
+
 set -e
 
 usage() {
