@@ -1,0 +1,169 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+</head>
+<body>
+<h1 id="soft351---mpi-communications">SOFT351 - MPI Communications</h1>
+<blockquote>
+<p>Date: 24-11-16</p>
+</blockquote>
+<h3 id="connection-topologies">Connection Topologies</h3>
+<ul>
+<li>If we have multiple processing cores
+<ul>
+<li>How can they be connected together?</li>
+</ul></li>
+<li>If on same PC, they can communicate via main memory bus
+<ul>
+<li>Effectively every core is connected directly to every other core</li>
+</ul></li>
+</ul>
+<h3 id="networking-hardware">Networking hardware</h3>
+<ul>
+<li>Once you have computations running in parallel across multiple machines
+<ul>
+<li>You need a network</li>
+</ul></li>
+</ul>
+<h3 id="network-topologies">Network topologies</h3>
+<ul>
+<li>Let's assume connections are <em>direct</em>
+<ul>
+<li>I.e there is a physical wire or fibre between any two connected machines</li>
+</ul></li>
+<li>How should these connections be organised?</li>
+<li>Simplest option is a fully connected network: connect every node to every other node</li>
+</ul>
+<h3 id="fully-connected-network">Fully connected network</h3>
+<ul>
+<li>6 pcs all connected to every other pc</li>
+</ul>
+<p><strong>Properties of this network:</strong></p>
+<ul>
+<li><strong>Diameter</strong> is the maximum path length between a pair of nodes
+<ul>
+<li>In our example it is 1</li>
+</ul></li>
+<li>This is best possible diamter
+<ul>
+<li>Higher values cause more latency</li>
+</ul></li>
+<li><strong>Bisection width</strong> of the network is the minmum number of links you need to cut to divide the network into two equal halves
+<ul>
+<li>Our example cut down the middle means you have to cut 9 connections</li>
+<li>So bisection width = 9</li>
+</ul></li>
+<li>A high value like this is better: more links = more resilience</li>
+<li>The bisection bandwidth is the bisection width multiplied by the bandwidth of a link
+<ul>
+<li>So in our network, if links were 10GB/s then the bisection bandwidth would be 9 * 10GB/s = 90GB/s</li>
+</ul></li>
+<li><p>This is relatively high which is good, affects the performance of many parallel algorthims</p></li>
+<li><strong>valency</strong> is how many connections each node makes
+<ul>
+<li>In this case, each node connects to 5 others, so valency = 5</li>
+<li>in general, valency = N - 1</li>
+</ul></li>
+<li>High valency is generally bad - if machines are directly connected then you need this many network ports / cables for each machine
+<ul>
+<li>Maximum number of ports is 6 or 7</li>
+</ul></li>
+<li><p>This means fully connected directly connected network is pretty unfeasible on a large scale</p></li>
+<li><strong>Link count</strong> is how many connections the network has in total
+<ul>
+<li>In this case <strong>link count</strong> = 15</li>
+<li>In general, <strong>link count</strong> = valency * number of nodes / 2</li>
+</ul></li>
+<li>The fully connected network is also very bad in this area
+<ul>
+<li>Shows how many wires you need</li>
+</ul></li>
+</ul>
+<h3 id="alternatives">Alternatives</h3>
+<ul>
+<li>Fully connected network isn't practical</li>
+<li><strong>Alternatives</strong>
+<ul>
+<li>Ring</li>
+<li>Thin tree</li>
+</ul></li>
+</ul>
+<h3 id="ring-topology">Ring Topology</h3>
+<ul>
+<li><p>Each node is connected to two neighbours, forming a closed loop</p></li>
+<li>What is the <strong>diameter?</strong>
+<ul>
+<li>In this case: 3</li>
+<li>in general: N/2 (have to traverse half the network)</li>
+</ul></li>
+<li><p><strong>Not great!</strong> For a large network, messages may have high latency</p></li>
+<li>What is the <strong>bisection</strong>?
+<ul>
+<li>In this case: 2, 2 * link bandwidth</li>
+<li>In general, 2 if it is even</li>
+</ul></li>
+<li><p><strong>Not great!</strong> Not resilient to broken links, low bandwidth</p></li>
+<li>What is the <strong>Valency</strong>?
+<ul>
+<li>In this case: 2</li>
+<li>In general: 2</li>
+</ul></li>
+<li><p><strong>Great!</strong> only need two ports per machine</p></li>
+<li>What is the <strong>link count?</strong>
+<ul>
+<li>In this case: 6</li>
+<li>In general: N</li>
+</ul></li>
+<li><p><strong>Great!</strong> Only need as many cables as there are machines</p></li>
+</ul>
+<p><strong>Summary:</strong> - Well on practical but poor on performance</p>
+<p><em>Performance</em> - Low bisection width and bisection bandwidth - high diameter</p>
+<p><em>pratical</em> - Cheap to implement - Only need two network ports per machine (low <strong>valence</strong>) - Only need one cable per machine (low <strong>link count</strong>)</p>
+<h3 id="thin-tree-topology">Thin tree topology</h3>
+<ul>
+<li>Arrange nodes into a tree where each parents has M children
+<ul>
+<li>Lets take M=2 binary tree</li>
+</ul></li>
+</ul>
+<p><img src="img/thin-tree-topology.png" alt="thin-tree-topology" /><br />
+- What is the <strong>diameter</strong> - this case: 4 - in general: 2 log2 (n + 1) / 2 - <strong>Not bad</strong> grows less than linearly with N</p>
+<ul>
+<li>What is the <strong>bisection</strong>
+<ul>
+<li><strong>Cant cut exactly in half</strong> (odd N)</li>
+<li>In this case: 1</li>
+<li>In general (for M=2): 1</li>
+</ul></li>
+<li><p><strong>bad</strong> low resilience / bandwidth</p></li>
+<li>What is the <strong>valency</strong>
+<ul>
+<li>In this case: 3</li>
+<li>In general: M for root, 1 for leaves, M+1 for others</li>
+</ul></li>
+<li>Only really interested in Maximum valency</li>
+<li><p><strong>Not bad</strong>, for binary tree only need 3 network ports max</p></li>
+<li>What is the <strong>Link count</strong>
+<ul>
+<li>in this case: 6</li>
+</ul></li>
+<li><p><strong>Not bad</strong></p></li>
+</ul>
+<h3 id="thin-tree-summary">Thin tree: summary</h3>
+<ul>
+<li><p>Thin tree is compromise between a fully connected network and a ring</p></li>
+<li><strong>Good</strong>: low diameter, low valency and low link count</li>
+<li><p><strong>Bad</strong>: low bisection width and bisection bandwidth</p></li>
+<li>This means it will fairly good for latency and quite low cost to implement
+<ul>
+<li>but the bandwidth and resilience are limited</li>
+</ul></li>
+</ul>
+<h3 id="distributing-data">Distributing data</h3>
+</body>
+</html>

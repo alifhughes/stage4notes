@@ -6,6 +6,8 @@ Note that your report is NOT required to deal with customer memberships and subs
 ### Question:
 
 **'Essentially you have to choose a particular type and example of NoSQL database and justify why this choice is better than others'**
+- Picked graph databases, specifically Neo4j
+    - Throughout essay, when I make a point for Neo4j, link to other NoSQL options and comapre and contrast against them
 - Critically analysis the pros and cons of all
 - Explain and give evidence for HOW it will work
 - weigh up
@@ -29,6 +31,10 @@ Note that your report is NOT required to deal with customer memberships and subs
     - BUT HOW AND WHY
 
 ### Writing prompts:
+
+- Get every feature of graph databases
+    - Link it to the question
+    - compare it other NoSQL options
 
 Think big
 - Multinational
@@ -82,6 +88,7 @@ Use Graph databases
 - Research Redis
 - Look at other multinational companies using graph databases like **amazon**
 - Neo4j
+- **Clustering**
 - Look at the use of graph databases in recommendation systems
 - Content based systems (item-to-item) done
 - collaborative filtering (user-to-user) done
@@ -116,6 +123,13 @@ _Basic definition_
 
 
 ##### What would the relationships and nodes represent?
+
+
+noun(node/entity) -> verb(relationship) -> noun(node/entity)
+subject -> verb -> object
+Joe -> owns -> toyota
+- this is graph theory
+
 - Relationships:
     - Also watched
     - Same genre
@@ -251,8 +265,25 @@ https%3A%2F%2Fdiuf.unifr.ch%2Fmain%2Fis%2Fsites%2Fdiuf.unifr.ch.main.is%2Ffiles%
     - If their product is already in Java then this is an easy integration
 - Has its own language of CQL
     - Cypher query language
+    - When writing it is about pattern matching
    - (more training to use)
+- Clustering
 
+
+### What information is represented
+
+- highly interconnected data
+    - Movies and all the things that come along with it, actors, directors, genres
+- data that needs to be traversed efficiently
+    - To provide real time recommendation
+- Does well at searching patterns of interations through and between data
+- Data that is increasing and the connections between data that are increasing
+
+- To understand the need to use a graph database for a recommendation system you need to understand the significance of how connected the data is. 
+    - This is the graph database's one true strenght
+    - Working effeiciently with connected data
+        - HOW?
+        - WHY?
 
 # OTHER DATABASES
 
@@ -263,3 +294,26 @@ https%3A%2F%2Fdiuf.unifr.ch%2Fmain%2Fis%2Fsites%2Fdiuf.unifr.ch.main.is%2Ffiles%
 **Redis**
 - Reading
 
+
+
+### Writing structure
+
+
+- Breif of SQL vs NoSQL in context of recommendation systems
+
+- Introduction to graph databases and Neo4j
+
+- Features of Neo4j
+- How it works with data
+    - What the data is
+    - How it is connected
+    - How it finds patterns with it
+    - How effiecent it is at doing so (figuresss)
+
+- Clustering
+
+- different types of recommendation 
+    - content based
+    - Collaborative
+
+- what the data would be
