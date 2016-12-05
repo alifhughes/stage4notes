@@ -197,4 +197,3 @@ _e.g_
 - Collects data from arrays distributed across all the processes into one big array that all processes have a copy of
 - could be implemented using a butterfly arrangement
 
-![mpi-allgather-eg-1](img/mpi-allgather-eg-1.png)\

@@ -268,6 +268,8 @@ https%3A%2F%2Fdiuf.unifr.ch%2Fmain%2Fis%2Fsites%2Fdiuf.unifr.ch.main.is%2Ffiles%
     - When writing it is about pattern matching
    - (more training to use)
 - Clustering
+- Supports ACID
+
 
 
 ### What information is represented
@@ -294,10 +296,7 @@ https%3A%2F%2Fdiuf.unifr.ch%2Fmain%2Fis%2Fsites%2Fdiuf.unifr.ch.main.is%2Ffiles%
 **Redis**
 - Reading
 
-
-
 ### Writing structure
-
 
 - Breif of SQL vs NoSQL in context of recommendation systems
 
