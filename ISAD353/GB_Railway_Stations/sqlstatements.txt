@@ -1,0 +1,17 @@
+CREATE TABLE railways
+(
+    railway_id   NUMBER CONSTRAINT railway_id_pk PRIMARY KEY,
+    name         VARCHAR2(50),
+    latitude     FLOAT,
+    longitude    FLOAT
+);
+
+CREATE SEQUENCE seq_railways_railway_id;
+
+CREATE OR REPLACE TRIGGER trg_railways_railway_id
+BEFORE INSERT ON railways FOR EACH ROW
+BEGIN
+
+  :NEW.railway_id := seq_railways_railway_id.nextval;
+
+END;

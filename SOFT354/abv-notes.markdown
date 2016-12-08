@@ -276,9 +276,12 @@ Following block sizes:
 - Therefore, a whole block's threads need to access both columns and rows twice
 - If you load first two rows and first two columns for first
 
+
 ![shared-mem-matrix-multiplication-1](img/shared-mem-matrix-multiplication-1.png)\
 
+
 ![shared-mem-matrix-multiplication-2](img/shared-mem-matrix-multiplication-2.png)\
+
 
 - In the first phase, the threads load the size of their block that they're calculating from each one of the matrix
 - It calculates half its dot product
@@ -289,7 +292,9 @@ Following block sizes:
 
 ### Compute to global memory access (CGMA)
 
+
 ![CGMA-ratio](img/CGMA-ratio.png)\
+
 
 - How many floating point operations will a block do?
 - How many global memory accesses will it do
@@ -333,13 +338,57 @@ Following block sizes:
 
 **`2Db + M - 1`**
 
+
 ![convolution-mask-CGMA-shared](img/convolution-mask-CGMA-shared.png)\
+
+
+### Task parallelism
+
+- A task is split up into different sections where different workers work on different parts of the same task at the same time
+
+### Data parallelism
+
+- A task is processed from start to finish by one thread/worker
+- But potentially different data is used for each task
+
+### Single instruction stream, single data stream (SISD)
+
+- The CPU does **one operation** at a time on **one piece of data**
+
+### Single instruction stream, multiple data stream (SIMD)
+
+- **Multiple cores** that process **multiple data streams** in parallel
+- **BUT** each core executes the same instruction at once
+
+### Multiple instruction stream, single data stream (MIMD)
+
+- The **same data** is read from memory into **multiple processing units** each of which have their own instructions
+
+### Multiple instruction stream, multiple data stream (MIMD)
+
+- Each processing unit can **access different data from memory** and run **different instructions**
+
+### Shared memory system
+
+- Each processing core can **directly access** the **same memory**
+
+### Distributed memory system
+
+- Each processing core has its **own private memory**
+- It can only access **another's indectly**
+
+### Hybrid memory system
+
+- **Groups** of processing cores **share memory**
+- **But** memory is **not** shared between groups
 
 ### Speed-up
 
 - How long does a parallel version of a program take to run vs a serial version
 
+
 ![speed-up-formula](img/speed-up-formula.png)\
+
 
 ### Linear speed-up
 
@@ -347,7 +396,9 @@ Following block sizes:
 - Adding more processors means that the task becomes faster
 - Good for scaling as you can just add more processors
 
+
 ![linear-speed-up-formula](img/linear-speed-up-formula.png)\
+
 
 ### Parallel efficiency
 
@@ -359,16 +410,22 @@ Following block sizes:
 - For linear speed-up, `E = 1`
 - For sublinear speed-up, `E < 1`
 
+
 ![parallel-efficiency-formula](img/parallel-efficiency-formula.png)\
+
 
 ### Amdahl's Law
 
+
 _'There is a limit to how fast you can do something even if you add more processors'_
+
 - It is limited by the time spend processing the section of code that can't be serialised
 - For the same problem size, as the number of processors increases speed-up is limited to:
     - _where r is the proportion of code that cannot be parallised_
 
+
 ![amdahs-law-formula](img/amdahs-law-formula.png)\
+
 
 - No matter how many processors we have the code will always be limited to:
 
@@ -379,11 +436,14 @@ _'There is a limit to how fast you can do something even if you add more process
 
 ### Gustafson's Law
 
-- _'By adding more processors you can always process more data in a given period of time'_
+_'By adding more processors you can always process more data in a given period of time'_
+
 - Assume that the problem size (amount of data to be processed) increases with the number of processors (p)
 - Divide parallel program execution time into two parts:
 
+
 ![gustafsons-law-formula-1](img/gustafsons-law-formula-1.png)\
+
 
 **Example:**
 
@@ -391,7 +451,7 @@ _'There is a limit to how fast you can do something even if you add more process
 - Starting up CUDA, copying data to/from GPU, launching kernel takes 100ms
     - `a = 100ms`
 - The kernel runs (on all cores in parallel) for 500ms
-    - `b = 600ms`
+    - `b = 500ms`
 
 ![tp-eg](img/tp-eg.png)\
 
@@ -401,11 +461,14 @@ _'There is a limit to how fast you can do something even if you add more process
 
 ![ts-eg](img/ts-eg.png)\
 
+
 - **If the problem size scales with the processor count (p)**
 - The speed-up is limited to:
     - _where r is the proportion of the program that can't be parallelised_
 
+
 ![gustafsons-law-formula](img/gustafsons-law-formula.png)\
+
 
 ### Message Passing Interface **MPI**
 
@@ -515,27 +578,94 @@ _Types of topologies:_
 
 ![binary-tree-dist-data](img/binary-tree-dist-data.png)\
 
+
 ### MPI\_Scatter
+
 
 ![mpi-scatter-dist-data](img/mpi-scatter-dist-data.png)\
 
+
 ### MPI\_Gather
+
 
 - Does the opposite of MPI\_Scatter
 - Collects data from arrays distributed across all the processes into one big array
 
 ![mpi-gather-dist-data](img/mpi-gather-dist-data.png)\
 
+
 ### MPI\_Reduce
+
 
 - Take an array of values and reduce it to a single value
 
 ![mpi-reduce-max-dist-data](img/mpi-reduce-max-dist-data.png)\
 
+
 ### MPI\_AllReduce
+
 
 ![mpi-all-reduce-dist-data](img/mpi-all-reduce-dist-data.png)\
 
+
 ### MPI\_AllGather
 
+
 ![mpi-all-gather-dist-data](img/mpi-all-gather-dist-data.png)\
+
+
+
+
+### Topics that came up v topics that haven't come up
+
+_italic text means they've appeared twice_
+
+**Have appeared** | **Haven't appeared**
+------------------------------------------------|------------------------------------------------
+_static allocation_|Gustafon's law
+---|---
+pinned memory|what a SM is
+---|---
+which types of memory|difference between host and device
+---|---
+instruction level parallelism|difference bettwen static and dynamic
+---|---
+constant memory|disadvantages of performance with branching
+---|---
+how many threads will be created for a kernel launch|how threads can coporate to load data into shared mem
+---|---
+data organisation into cache|why CGMA is important
+---|---
+_row/component major order_|convolution
+---|---
+maximising occupancy|how shared memory can be optimised calculating a convolution
+---|---
+maximum number of blocks that can be resident in multiprocessor|difference between task and data parallelism
+---|---
+_coalesced memory access_|sublinear & super linear
+---|---
+_CGMA_|difference between threads and processes
+---|---
+syncthreads|`MPI_Send` & `MPI_Recv`
+---|---
+_divergence_|how `MPI` functions are blocking and non-overtaking
+---|---
+network topologies and their properties|different `MPI` collective communcation functions
+---|---
+register spilling and effect on other memory because of it|why and how collective communication functions can be efficient
+---|---
+CGMA of code|
+---|---
+SISD,SIMD,MISD,MIMD|
+---|---
+speedup|
+---|---
+efficieny|
+---|---
+amdahls|
+---|---
+linear speedup|
+---|---
+shared memory|
+---|---
+general formulas for topolgies|
