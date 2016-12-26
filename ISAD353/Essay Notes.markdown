@@ -391,4 +391,42 @@ if were attempt to do this relational
     - THE AVERAGE USER COUNT JOINING AND LEAVING EACH MONTH
 - can't easily see all the data connected and therefore can't build up the entire picture
 
+what type of recommendation engine
+- how would i naturally recommend someone a movie
+- get a friend that i trust (collaborative)
+    - on a bigger scale can use techniques like k nearest neighbour to get people who are similar to you which would factor in the recommendation
+        - updated daily or something, this way you get ever changing groups and therefore ever changing recommendations
+    - problem is get a list of recommendations that is simple and one sided, get same thing over and over
+- or look at the properties of the film (content based)
+    - genre, directors etc
+    - problem is always the same, same movie but you need to push people out of this
+
+- people aren't so one dimensional, so a hybrid approach is best
+- comibination of multiple thing
+- scores and weights 
+
+
+
+how to implement
+- he rated this movie highly
+    - he also rated this movie highly 
+    - correlated on rating
+- He liked this movie which is in this genre
+    - I liked this movie that is also in the same genre
+    - correlated on genre
+
+how to represent easily in cypher
+- how natural that works
+    - that is the power of graph databases
+
+however, finite movies
+    - same movie can be discovered multiple times
+    - how to change that
+    - how to rank the relevance
+    - how to rid of data that is not part of the recommendation
+        - encapsulate in another graph
+
+you can see how easy it is to build up a simple thing
+    - cost of development and implementation is low
+
 
