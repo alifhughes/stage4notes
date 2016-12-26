@@ -165,6 +165,7 @@ https%3A%2F%2Fdiuf.unifr.ch%2Fmain%2Fis%2Fsites%2Fdiuf.unifr.ch.main.is%2Ffiles%
 - "A graph data model, although being fairly new has many solutions to improve business applications that have a huge amount of data with a high degree of correlation."
 
 ### Content-based system (item-to-item)
+http://recommender-systems.org/content-based-filtering/
 - AKA cognitive filtering
 - "A model whereby the recommendations are made on the basis of serveral properties of the product"
 - "Compares the similarities of the complementarity of the elements"
@@ -202,6 +203,10 @@ https%3A%2F%2Fdiuf.unifr.ch%2Fmain%2Fis%2Fsites%2Fdiuf.unifr.ch.main.is%2Ffiles%
         - _DO NOTICE THAT IT DOESN'T GROW SO MUCH AS DATA PUT IN SUBSTITUES FOR DATA TAKEN OUT_
     - User's choices and behaviours are notourisly hard to pin
         - Not often do you find someone who will only watch a certain type of movie, becomes very general and therefore the recommendations become more broad
+
+examples in real world:
+http://courses.cs.washington.edu/courses/csep521/07wi/prj/michael.pdf
+uses 'The music genome project' which takes its name from the 'Human gneme project', they both seek to provide attributes about an item that allows for generaly taxonmy to describe the item itself, thus allowing comparisons to be made between the descriptions. This allows for similarites to be found across the items which provides the base for making recommendations via a content based approach. The problem with this which goes for most properties of content based approach is that it is subjective to the person 'tagging' the item, and therefore the data can be biased. Methods such as scoring across songs by many people or algorithms can balance out this bias but that is expensiveand thus the bottleneck of this method is found. to circumnaviagate this problem, they the data that is applied to describe the movie can be from the source of the item itself, e.g the movie production office provides the genre of the movie, not critics of the movie and having a list of actors that appear in the movie which provides a factual approach to describing the item without bias. This in combination with collaborative filtering leans towards the most widely adopted hybrid aproach, taking the best bits out of both and merging them together.
 
 ### Collaborative filtering (user-to-user)
 - AKA social filtering
@@ -316,3 +321,74 @@ https%3A%2F%2Fdiuf.unifr.ch%2Fmain%2Fis%2Fsites%2Fdiuf.unifr.ch.main.is%2Ffiles%
     - Collaborative
 
 - what the data would be
+
+**New research**
+
+https://www.ibm.com/blogs/bluemix/2016/05/graph-recommendation-engines/
+It’s becoming more and more difficult to create real-time functionality, such as an effective recommendation engine, using traditional NoSQL or relational databases, primarily due to the size and diversity of the data stores available.
+Most existing databases have difficulty scaling to accommodate complex data relationships, requiring significant and untenable trade-offs in performance, latency and cost.
+Because of the way property graphs store data and connections together, recommendations can be based on a wide range of data sources, including historical data, as well as what is happening in the current session (which is difficult for a traditional database).
+
+https://www.quora.com/What-is-the-advantage-of-using-a-graph-database-over-a-relational-database-for-recommendations
+where connections between the data are as important as the data. 
+
+http://www.forbes.com/sites/danwoods/2014/02/14/50-shades-of-graph-how-graph-databases-are-transforming-online-dating/#1530aa013002
+
+https://neo4j.com/resources/recommendations-business-white-paper/
+
+
+https://www.youtube.com/watch?v=KnQoNJJ4k8I
+Features and their relationships can be naturally represented by a graph
+if someone rated a movie highly, then it could suggest that the they are interested in movies of that genre
+benefits
+    - Easy to understand
+    - natural to model
+    - flexible because it is schema free
+        - can keep adding different types of relationships as you go along and won't break it
+        - means it can evolve over time
+        - could be seen to grow too big if not done appropiately and carefully
+        - fast to query!
+
+cypher language
+- easy to use to test
+- fast for query a lot of data (100, thousands
+- express patterns in the grapho
+
+business challenges
+- finding things to recommend
+- sort and serve the most relevant ones
+- measure the quality of recommendations
+- measure the ROC
+
+tech challenges
+- preformance
+    - want to serve the best in real time
+    - want them to based on the most update information
+- simplicity
+    - cypher
+- flexible
+    - schema free
+
+
+why neo4j
+- real time
+    - has to be relevant
+    - changing as user preferences change
+    - don't want recommendations off of movie you watched 5 months ago
+- process large amounts of data and relationships for context
+- accomadate continuously new data
+
+if were attempt to do this relational
+- would require a lot of tables and look up tables
+    - one for user
+    - one for likes
+    - one for movies
+    - one for genres
+- limiting yourself in flexibility of continuely adding and changing data
+- a lot more ridged
+- also makes it hard to scale as data is continuously being added
+    - LOOK FOR STATS TO SEE HOW MUCH THE MOVIES CHANGE ON NETFLIX
+    - THE AVERAGE USER COUNT JOINING AND LEAVING EACH MONTH
+- can't easily see all the data connected and therefore can't build up the entire picture
+
+

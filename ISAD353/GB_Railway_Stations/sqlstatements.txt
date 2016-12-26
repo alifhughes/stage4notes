@@ -1,17 +1,284 @@
 CREATE TABLE railways
 (
-    railway_id   NUMBER CONSTRAINT railway_id_pk PRIMARY KEY,
-    name         VARCHAR2(50),
-    latitude     FLOAT,
-    longitude    FLOAT
+    railway_station_id         NUMBER CONSTRAINT railways_id_pk PRIMARY KEY,
+    railway_station_name       VARCHAR2(50),
+    railway_station_location   MDSYS.SDO_GEOMETRY,
+    filename		       VARCHAR2(100),
+    image                      ORDSYS.ORDImage,
+    thumbnail                  BLOB
 );
 
 CREATE SEQUENCE seq_railways_railway_id;
 
-CREATE OR REPLACE TRIGGER trg_railways_railway_id
+CREATE OR REPLACE TRIGGER trg_railway_station_id
 BEFORE INSERT ON railways FOR EACH ROW
 BEGIN
 
-  :NEW.railway_id := seq_railways_railway_id.nextval;
+  :NEW.railway_station_id := seq_railways_railway_id.nextval;
 
 END;
+
+INSERT INTO railways 
+(railway_station_id, railway_station_name, railway_station_location)
+SELECT seq_railways_railway_id.nextval, railway_data.NAME, MDSYS.SDO_GEOMETRY(2001, NULL, MDSYS.SDO_POINT_TYPE(railway_data.LATITUDE, railway_data.LONGITUDE, NULL), NULL, NULL)
+FROM railway_data;
+
+INSERT INTO 
+user_sdo_geom_metadata
+(table_name, column_name, diminfo, SRID)
+VALUES ('railways', 'railway_station_location', SDO_DIM_ARRAY(SDO_DIM_ELEMENT('Longitude', -180, 180, 0.05), SDO_DIM_ELEMENT('Latitude', -90, 90, 0.05)), 4326);
+
+CREATE INDEX location_id ON railways (railway_station_location)
+   INDEXTYPE IS MDSYS.SPATIAL_INDEX;
+
+
+ DECLARE
+  
+  l_query VARCHAR2(4000);
+
+
+BEGIN
+
+
+  l_query:= 
+   'select 
+    "RAILWAY_STATION_ID",
+    "RAILWAY_STATION_NAME",
+    "RAILWAY_STATION_LOCATION"
+    from   "RAILWAYS" ';
+
+  IF v('P2_REPORT_SEARCH') IS NOT NULL THEN
+    l_query := l_query||' '||'
+    where 
+    (   
+     CONTAINS(RAILWAY_STATION_NAME, :P2_REPORT_SEARCH) > 0 
+    )
+   ';
+  END IF;
+
+
+  RETURN l_query;
+
+
+END;
+
+CREATE INDEX railways_ctx_idx
+ON RAILWAYS (RAILWAY_STATION_NAME)
+INDEXTYPE IS ctxsys.context;
+
+
+DECLARE
+
+  l_railway_id  NUMBER;
+  l_upload_size INTEGER;
+  l_upload_blob BLOB;
+  l_image       ORDSYS.ORDImage;
+ 
+BEGIN
+
+  --
+  -- Get the BLOB of the new image from the APEX_APPLICATION_TEMP_FILES (synonym for WWV_FLOW_TEMP_FILES)
+  -- APEX 5.0 change from APEX_APPLICATION_FILES which has been deprecated
+  -- APEX_APPLICATION_TEMP_FILES has fewer columns and is missing doc_size
+  --
+  
+  SELECT
+    blob_content
+  INTO
+    l_upload_blob
+  FROM
+    apex_application_temp_files
+  WHERE
+    name = :P3_filename;
+
+  UPDATE RAILWAYS
+  SET FILENAME = :P3_FILENAME, IMAGE = ORDSYS.ORDImage()
+  WHERE RAILWAY_STATION_ID = :P3_RAILWAY_STATION_ID;
+
+  SELECT
+      RAILWAY_STATION_ID, image
+  INTO
+      l_railway_id, l_image
+  FROM
+      RAILWAYS
+  WHERE
+      RAILWAY_STATION_ID = :P3_railway_station_id;
+
+  l_upload_size := dbms_lob.getlength(l_upload_blob);
+  DBMS_LOB.COPY( l_image.SOURCE.localData, l_upload_blob, l_upload_size );
+  l_image.setProperties(); 
+
+  UPDATE
+    RAILWAYS
+  SET
+    image = l_image -- original ORDImage image
+  WHERE
+    RAILWAY_STATION_ID = l_railway_id;
+ 
+END;
+
+
+CREATE OR REPLACE PROCEDURE create_blob_thumbnail (p_image_id IN INTEGER) IS
+  l_orig          ORDSYS.ORDImage;
+  l_thumb         ORDSYS.ORDImage;
+  l_blob_thumb    BLOB;
+ 
+BEGIN
+ 
+  -- lock row
+  SELECT image
+  INTO l_orig
+  FROM RAILWAYS
+  WHERE railway_station_id = p_image_id FOR UPDATE;
+  
+  l_thumb := ORDSYS.ORDImage.Init();
+  
+  dbms_lob.createTemporary(l_thumb.source.localData, true);
+  ORDSYS.ORDImage.processCopy(l_orig,
+                              'maxscale=128 128',
+                              l_thumb);
+  
+  -- extract BLOB from OrdImage 
+  UPDATE images
+  SET thumbnail = l_thumb.source.localData 
+  WHERE image_id = p_image_id;
+  
+  dbms_lob.freeTemporary(l_thumb.source.localData);
+  
+  COMMIT; 
+ 
+END;
+
+  CREATE UNIQUE INDEX "ALISTAIRHUGHES"."RAILWAYS_ID_PK" ON "ALISTAIRHUGHES"."RAILWAYS" ("RAILWAY_STATION_ID") 
+  PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
+  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "USERS" ;
+
+
+
+—
+CREATE TABLE railway_stations
+(
+    railway_id         NUMBER CONSTRAINT railway_station_id_pk PRIMARY KEY,
+    railway_name       VARCHAR2(50),
+    railway_location   MDSYS.SDO_GEOMETRY,
+    filename		       VARCHAR2(100),
+    image              ORDSYS.ORDImage,
+    thumbnail          BLOB
+);
+
+CREATE SEQUENCE seq_railway_station_railway_id;
+
+CREATE OR REPLACE TRIGGER trg_railway_id
+BEFORE INSERT ON railway_stations FOR EACH ROW
+BEGIN
+
+  :NEW.railway_id := seq_railway_station_railway_id.nextval;
+
+END;
+
+INSERT INTO railway_stations 
+(railway_id, railway_name, railway_location)
+SELECT SEQ_RAILWAY_STATION_RAILWAY_ID.nextval, railways.RAILWAY_STATION_NAME, railways.RAILWAY_STATION_LOCATION
+FROM railways;
+
+CREATE INDEX railway_location_id ON railway_stations (railway_location)
+   INDEXTYPE IS MDSYS.SPATIAL_INDEX;
+
+CREATE INDEX railway_station_ctx_idx
+ON RAILWAY_STATIONs (RAILWAY_NAME)
+INDEXTYPE IS ctxsys.context;
+
+
+
+ DECLARE
+  
+  l_query VARCHAR2(4000);
+
+
+BEGIN
+
+
+  l_query:= 
+   'select 
+	"RAILWAY_ID",
+	"RAILWAY_NAME",
+	dbms_lob.getlength("THUMBNAIL") "THUMBNAIL"
+    from   "RAILWAY_STATIONS";
+
+  IF v('P2_REPORT_SEARCH') IS NOT NULL THEN
+    l_query := l_query||' '||'
+    where 
+    (   
+     CONTAINS(RAILWAY_NAME, :P2_REPORT_SEARCH) > 0 
+    )
+   ';
+  END IF;
+
+
+  RETURN l_query;
+
+
+END;
+
+ DECLARE
+  
+  l_query VARCHAR2(4000);
+
+
+BEGIN
+
+ -- base query
+  l_query:= 
+   'select 
+	"RAILWAY_ID",
+	"RAILWAY_NAME",
+	dbms_lob.getlength("THUMBNAIL") "THUMBNAIL"
+    from   "RAILWAY_STATIONS"';
+
+    IF v('P2_REPORT_SEARCH') IS NOT NULL THEN
+           
+        l_query := l_query||' '||'
+        WHERE 
+        (   
+         CONTAINS(RAILWAY_NAME, :P2_REPORT_SEARCH) > 0 
+        )
+       ';
+       
+       IF v('P2_LATITUDE') IS NOT NULL AND v('P2_LONGITUDE') IS NOT NULL AND v('P2_DISTANCE') IS NOT NULL THEN
+            l_query := l_query||' '||'
+            AND sdo_within_distance (
+            railway_location, MDSYS.SDO_GEOMETRY(2001,NULL,MDSYS.SDO_POINT_TYPE(:P2_LATITUDE,:P2_LONGITUDE,NULL),NULL,NULL),
+            ''distance=' || :P2_DISTANCE || ''') = ''TRUE''';
+       END IF;
+    
+    ELSIF v('P2_LATITUDE') IS NOT NULL AND v('P2_LONGITUDE') IS NOT NULL AND v('P2_DISTANCE') IS NOT NULL THEN
+
+        l_query := l_query||' '||'
+        WHERE sdo_within_distance (
+        railway_location, MDSYS.SDO_GEOMETRY(2001,NULL,MDSYS.SDO_POINT_TYPE(:P2_LATITUDE,:P2_LONGITUDE,NULL),NULL,NULL),
+        ''distance=' || :P2_DISTANCE || ''') = ''TRUE''';
+        
+        IF v('P2_REPORT_SEARCH') IS NOT NULL THEN
+        
+            l_query := l_query||' '||'
+            AND 
+            (   
+             CONTAINS(RAILWAY_NAME, :P2_REPORT_SEARCH) > 0 
+            )
+           ';
+        END IF;
+
+    END IF;        
+    
+  RETURN l_query;
+  
+END;
+
+
+
+
+
+

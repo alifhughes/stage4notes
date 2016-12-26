@@ -50,10 +50,6 @@ __global__ void timestepKernel(particle_t* particles)
         float dphi = 0.0f;
         float nearCount = 0.0f;
 
-        #ifdef USE_SHARED_BUFFER
-        ////
-        // Shared memory version.
-        ////
         for (int i = 0; i < NUM_PARTICLES/SHARED_BUFFER_SIZE; i++) {
             // In each phase (i), one thread loads one particle into shared memory.
             sharedParticles[threadIdx.x] = particles[i*SHARED_BUFFER_SIZE+threadIdx.x];
@@ -72,10 +68,7 @@ __global__ void timestepKernel(particle_t* particles)
                 }
             }
         }
-        #else
-        ////
-        // Non-shared memory version.
-        ////
+
         for (int j = 0; j < NUM_PARTICLES; j++) {
             particle_t other = particles[j];
 
