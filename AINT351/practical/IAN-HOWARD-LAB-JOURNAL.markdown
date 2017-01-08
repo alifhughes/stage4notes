@@ -138,3 +138,5 @@ If we were to change the values of A it would change the shape of the curve. A c
 This exercises was to replicate the noisy quadratic curve but have it fitted using the `regress` function which returns a vector of coefficient estimates for a multi-linear regression of the responses in Y on the predictors in X. To do this, I had to create a vector of 1s combined with the value of X. We attached them together to make sure we get the first beta value. Then we get the beta value by using the `regress` function with the parameters of our newly created X values and the Y values. This gives us the fitted values of the line. The only change in the fitted quadratic line is the fact, as it is quadratic, we use the power of two to give us the parabolic curve.
 
 The fitted linear line represents a positive correlation between the values of X and Y. But, as described in the last exercise, the quadratic fitted line, although shows correlation, it is both positive and negative to a limit, giving us the curve.
+
+

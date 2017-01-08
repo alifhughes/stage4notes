@@ -277,7 +277,9 @@ BEGIN
   
 END;
 
-
+SELECT r.image.getContent()
+FROM RAILWAY_STATIONS r
+WHERE r.railway_id = :P3_RAILWAY_ID
 
 
 
