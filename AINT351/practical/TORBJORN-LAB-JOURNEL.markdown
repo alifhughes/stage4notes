@@ -168,11 +168,11 @@ As stated, I have written tests for all of the core functionality to eradicate t
 
 The purpose of the `experiment` function was to accumulate data about how it runs multiple trials and plot to the mean and standard deviation of each trial's episode against the corresponding episode of other the other trials, this could then be plotted in a graph to analyse. As known, there has been problems with episodes getting stuck into high number of steps before breaking out and finding the goal state and mine was no exception to this problem. We were advised to lower the K value, which I believe would limit the amount it would have to find in order to predict the next best step. In the examples below I have shown trials of 25 and one of 50:
 
-![NSMExperiment-25-1](img/NSMExperiment-25-1.png)\
+![NSMExperiment-25-1](../img/NSMExperiment-25-1.png)\
 
 In the above, 25 trials have run and you can see that even with the apparent bug in `NSMTrial`, once run multiple times and the mean taken of it smooths out the line to a reasonable extent to show that it is in-fact learning as it should. That is the mean and standard deviation tend towards 0 when as the trials continue. There is in fact some disturbance closer to the end but this could be caused by it getting stuck for a period of time.
 
-![NSMExperiment-50-2](img/NSMExperiment-50-2.png)\
+![NSMExperiment-50-2](../img/NSMExperiment-50-2.png)\
 
 In the above, 50 trials have run and you can see that is very similar to the 25 trials if not closer to the desired outcome. It shows that it is working, learning through the trials and improviving with the more repetitions, but also with the bug in `NSMTrial` and the fact I stated it does get stuck shows that a part of the system isn't working fully effectively. I have tried to eliminate the basic functions as possible candidates for the bugs by writing tests for them but even still I have only covered the most basic functionality and not all edge cases as I would have like to if I had more time available to me.
 
