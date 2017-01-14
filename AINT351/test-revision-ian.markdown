@@ -187,3 +187,87 @@ _Types of data:_
 - P( A n B) = P(A) . P(A|B)
 - **This relationship is always true**
 
+### Interpreting covariance
+
+- If we calculate the covariance between two random variables
+- if the cov(X, Y) > 0
+    - X and Y are positively correlated
+- If the cov(X, Y) < 0
+    - X and Y are inversely correlated
+- If the cov(X, Y) = 0
+    - X and Y are independent
+
+### Marginalisation
+
+- Sum of probabilities across their given variable
+
+### Conditional probability
+
+- If A and B are **NOT** independent events then
+- `P(A n B) = P(A) . P(B|A)`
+- This relationship is always true
+- A has to happen for it to be true
+
+- If A and B **ARE** independent events then
+- P(A n B) = P(A) . P(B)
+- This relationship is only true if A and B are independent
+- Rolling a dice:
+    - The first throw doesn't effect the second
+
+### Product rule of probability
+
+- Product rule states that
+- `P(A,B) = P(B)P(A|B)`
+- `P(A,B) = P(A)P(B|A)`
+    - The joint probability of A and B is prob of A multiplied by the probability of A given B
+        - Same the other way around
+- Leads to bayes rule
+- `P(B)P(A|B) = P(A)P(B|A)`
+- `P(A|B) = P(A)P(B|A)/P(B)`
+    - The probability of A given B is equal to:
+    - The probability of A multiplied by the probability of B given A
+    - Over the probability of B
+    - This is bayes theorem
+- If A and B are independent
+    - `P(A, B) = P(A)P(B)`
+    - Joint probability of two independent events is the dot product probability of both events happening
+
+### Gradient descent
+
+- How can we get to the top of a hill?
+    - We follow the gradient
+- How can we get to the bottom of a hill
+    - We follow the descent
+- How do we know we're at the top
+    - It goes down on both sides
+
+### Gradient of a curve
+
+- Gradient is the slope of a curve or surface
+- Going up the hill it is +ve
+- Going downhill it is -ve
+- Differentiation finds tagent of line on graph
+- Gradient of straight line =
+    - Change in y
+    - over change in x
+
+![diff-regards-to-minimum](img/diff-regards-to-minimum.png)\
+
+### Iterative gradient decent
+
+- Find minimum of a function
+- Move downwards in direction of gradient
+
+### Local maxima and minima
+
+- Can be local minima as well as global minima
+    - Same for maxima
+- Gradient descent can get stuck in local minima/maxima
+
+### Least squares fitting
+
+- We want to fit a straight line to data measurements
+- Equation for straight line in a single dimension is:
+    - yi = mxi + c
+- Sum error over all points
+
