@@ -96,3 +96,15 @@
 - Want to create simple navigation between pages on app to gain further understanding of routing
 - Started cards
     - basic routing - https://trello.com/c/xNxnjErT
+- Completed login page with the backend handling the post request properly but isn't hooked up to a database
+- Wrote and submit weekly summary
+
+### 08-02-17
+
+- Linked up navigation between pages
+- Trying to define for myself the purposes between routes, controllers and middleware
+    - Controllers - talk to the database, have the business logic
+    - Routes - link the requests from that route to the controller and passes between view
+    - middleware - for a layer upon controllers that does common functionality between all controllers
+- Create basic sequencer page with no functionality
+- Think about requirements for sequencer and start to define user story and potentially start coding
