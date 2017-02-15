@@ -30,3 +30,18 @@
     - Each column is the beat/step
 - Loads of individual buttons/step
     - Each button/link is a step
+
+
+### Pseudo-code
+
+- work out the quarter note values
+    - bpm / 60 = beat per second
+    - beat per second / 4 for quarter notes
+
+- start timer
+    - That loops for 4 * beat per second (for 16 measures)
+    - restarts loop at the end
+
+- play note
+    - the note to be played
+    - the sound file

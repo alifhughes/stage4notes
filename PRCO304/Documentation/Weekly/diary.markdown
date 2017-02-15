@@ -108,3 +108,26 @@
     - middleware - for a layer upon controllers that does common functionality between all controllers
 - Create basic sequencer page with no functionality
 - Think about requirements for sequencer and start to define user story and potentially start coding
+
+### 12-02-17
+
+- Reasearched project requirements
+- found tone.js
+- Figured out how to structure app so that Web Audio API is available whilst using node js
+- found master thesis similar to mine
+
+### 13-02-17
+
+- further researched the problem of using web-audio api and node
+- figured out that have to include the javascript files html header
+- controllers are basic logic that handles requests
+- need to make a lib folder that contains the actual logic for web audio
+- researched and clarified for myself the difference between server side and client side programming
+- Set up and started new sprint for up coming two weeks
+- Estimated cards
+    - Currently at 14.5 points
+    - Ambitious but want to see how it goes
+- Need to set up app structure
+    - MVVM
+    - Model to do business logic of the client code
+    - Model-view to convert those values to for the view to use
