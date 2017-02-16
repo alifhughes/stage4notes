@@ -131,3 +131,20 @@
     - MVVM
     - Model to do business logic of the client code
     - Model-view to convert those values to for the view to use
+
+### 14-02-17
+
+- Decided on database
+- Wrote up justification for it
+
+### 15-02-17
+
+- Started programming client side application
+- Added browersify to bundle all js into one file
+    - Allows for node.js style includes in client side programming
+    - Helps to make client side js much more modular
+- Started programming the sequencer
+    - Plays note for duration and note specified
+    - start and stop buttons
+    - Got a bpm slider that works in adjusting the speed of playback of loop
+    - Got the basics of sequencing notes
